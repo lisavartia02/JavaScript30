@@ -43,6 +43,26 @@
 
 <button></button>
 <script>
+const divs = document.querySelectorAll('div');
+const button = document.querySelector('button');
+
+function logText(e){
+  console.log(this.classList.value);
+  e.stopPropagation(); // stop bubbling this event up
+}
+
+divs.forEach(div => div.addEventListener('click', logText, {
+  capture: false, // bubble down if set to true. Default its false. 
+  // once: true // An only run once
+}))
+
+// Capture, and bubble up, trigger event on the parent, fire click events 
+
+button.addEventListener('click', () => {
+  console.log('Click!!!');
+}, {
+  once: true // an only run once button
+})
 
 </script>
 </body>
