@@ -8,12 +8,12 @@
 <body>
   <h2>Cool</h2>
   <nav class="top">
-    <div class="dropdownBackground">
+    <div class="dropdownBackground"> <!-- That is the white background-->
       <span class="arrow"></span>
     </div>
 
     <ul class="cool">
-      <li>
+      <li> <!-- The lists are gonna be the triggers / parent-->
         <a href="#">About Me</a>
         <div class="dropdown dropdown1">
           <div class="bio">
@@ -143,10 +143,10 @@
     display: none;
   }
 
-  .trigger-enter .dropdown {
+  .trigger-enter .dropdown { 
     display: block;
   }
-
+/* first change it to display block, then opacity 1, step it cuz cant change both at the same time. For the transition to work we need the other class to change the opacity*/
   .trigger-enter-active .dropdown {
     opacity: 1;
   }
@@ -221,6 +221,40 @@
 </style>
 
 <script>
+  const triggers = document.querySelectorAll('.cool > li');
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+  function handleEnter(){
+    this.classList.add('trigger-enter');
+    setTimeout(() => this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active'), 150);
+    background.classList.add('open');
+    
+    const dropdown = this.querySelector('.dropdown');
+    const dropdownCoords = dropdown.getBoundingClientRect();
+    const navCoords = nav.getBoundingClientRect();
+
+    const coords = {
+      height: dropdownCoords.height,
+      width: dropdownCoords.width, 
+      top: dropdownCoords.top - navCoords.top, // offset for nested things
+      left: dropdownCoords.left - navCoords.left 
+    };
+
+    background.style.setProperty('width', `${coords.width}px`);
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+
+  function handleLeave(){
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    background.classList.remove('open');
+
+  }
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
+
 </script>
 
 </body>
